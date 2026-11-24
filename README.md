@@ -4,8 +4,8 @@
 
 Claude MD is a Windows desktop tool for keeping Claude Code skills in one place. It lists, edits and checks the `SKILL.md` files kept in a Storage folder, copies them into Claude Code's skills folder, uploads them to a shared Box zip, and links skills together as blocks to generate new workflow skills. It is for engineers who write and share Claude skills.
 
-- **Developer:** ro898771
-- **Author:** ro898771
+- **Developer:** Roey Yee
+- **Author:** Roey Yee
 - **Platforms:** Windows (WPF, .NET 9; `build.bat` publishes a single self-contained `Claude-MD.exe`)
 - **Supported File Formats:** `SKILL.md` (skills), `block.json` (a skill's inputs and outputs), `workflow.json` (a saved wiring)
 
