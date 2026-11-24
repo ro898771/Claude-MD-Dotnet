@@ -1,0 +1,4 @@
+{
+  "inputs":  [ { "name": "tsf_file", "type": "TSF_File" } ],
+  "outputs": [ { "name": "limits", "type": "SpecLimits" } ]
+}

@@ -1,0 +1,254 @@
+﻿<Window x:Class="ClaudeMd.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Claude Skill Storage" Width="1700" Height="990" MinWidth="1000" MinHeight="600" Icon="icon.ico"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="Seg" TargetType="RadioButton">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#374151" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="bd" CornerRadius="7" Padding="14,5" Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Opacity" Value="0.88" /></Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#4F46E5" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter TargetName="bd" Property="Opacity" Value="1" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- header: title, path chip + copy, search -->
+        <Grid Grid.Row="0" Margin="28,10,28,8">
+            <StackPanel HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Skill Storage" FontSize="20" FontWeight="Bold" Foreground="{StaticResource Ink}" VerticalAlignment="Center" />
+                    <Border Background="#F1F3F9" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="9" Padding="3" Margin="16,0,0,0" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="ModeStorage" Content="Skill Storage" GroupName="Mode" IsChecked="True" Style="{StaticResource Seg}" Checked="Mode_Changed" />
+                            <RadioButton x:Name="ModeWire" Content="Skill Wire Frame" GroupName="Mode" Style="{StaticResource Seg}" Checked="Mode_Changed" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                    <Border Background="#F8FAFC" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="7" Padding="10,3">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Style="{StaticResource Ic}" Data="{StaticResource IcFolder}" Stroke="#4F46E5" Width="15" Height="15" />
+                            <TextBlock x:Name="PathText" FontFamily="Consolas" FontSize="13" Foreground="#374151" Margin="8,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                    <Button Style="{StaticResource BtnGhost}" Margin="8,0,0,0" Padding="10,4" ToolTip="Copy path" Click="CopyPath_Click" Background="Transparent">
+                        <Path Style="{StaticResource Ic}" Data="{StaticResource IcCopy}" Stroke="#6B7280" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            <Border HorizontalAlignment="Right" VerticalAlignment="Top" Width="380" Height="36" CornerRadius="10" Background="#F8FAFC" BorderBrush="{StaticResource Line}" BorderThickness="1">
+                <Grid>
+                    <Path Style="{StaticResource Ic}" Data="{StaticResource IcSearch}" Stroke="#6B7280" HorizontalAlignment="Left" Margin="14,0,0,0" Width="15" Height="15" />
+                    <TextBox x:Name="SearchBox" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Margin="40,0,10,0" FontSize="13"
+                             Foreground="{StaticResource Ink}" TextChanged="SearchBox_TextChanged" />
+                    <TextBlock Text="Search skills, tags, or descriptions..." Foreground="#9CA3AF" FontSize="13" IsHitTestVisible="False" VerticalAlignment="Center" Margin="44,0,0,0">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=SearchBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- body: workspace explorer (tree) | group table -->
+        <Border Grid.Row="1" BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0">
+            <Grid x:Name="BodyGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="320" MinWidth="180" MaxWidth="720" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" MinWidth="420" />
+                </Grid.ColumnDefinitions>
+
+                <Border Background="#F8FAFC" BorderBrush="{StaticResource Line}" BorderThickness="0,0,1,0">
+                    <Grid>
+                        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+                        <Grid Margin="24,18,24,12">
+                            <TextBlock Text="WORKSPACE EXPLORER" FontSize="12" FontWeight="SemiBold" Foreground="#6B7280" VerticalAlignment="Center" />
+                            <Button Content="Show All" HorizontalAlignment="Right" Cursor="Hand" Click="ShowAll_Click">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <TextBlock Text="{TemplateBinding Content}" Foreground="#4F46E5" FontWeight="SemiBold" FontSize="14" />
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+                        <TreeView x:Name="Tree" Grid.Row="1" Background="Transparent" BorderThickness="0" Margin="14,0,14,10" FontSize="14"
+                                  SelectedItemChanged="Tree_SelectedItemChanged" MouseDoubleClick="Tree_DoubleClick"
+                                  PreviewMouseLeftButtonDown="Tree_PreviewMouseDown" PreviewMouseMove="Tree_PreviewMouseMove" />
+                    </Grid>
+                </Border>
+
+                <!-- drag to make the explorer wider or narrower -->
+                <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Center" VerticalAlignment="Stretch" ResizeDirection="Columns"
+                              ResizeBehavior="PreviousAndNext" ShowsPreview="False" Cursor="SizeWE" Background="Transparent"
+                              ToolTip="Drag to resize the explorer">
+                    <GridSplitter.Style>
+                        <Style TargetType="GridSplitter">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#C7D2FE" /></Trigger>
+                                <Trigger Property="IsDragging" Value="True"><Setter Property="Background" Value="#4F46E5" /></Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </GridSplitter.Style>
+                </GridSplitter>
+
+                <Grid x:Name="TablePane" Grid.Column="2">
+                    <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="28,12,28,10">
+                        <Border Width="38" Height="38" CornerRadius="10" Background="#EEF0FB" BorderBrush="#DDE1F5" BorderThickness="1">
+                            <Path Style="{StaticResource Ic}" Data="{StaticResource IcLayers}" Stroke="#4F46E5" Width="18" Height="18" HorizontalAlignment="Center" />
+                        </Border>
+                        <TextBlock x:Name="GroupTitle" FontSize="17" FontWeight="Bold" Foreground="{StaticResource Ink}" VerticalAlignment="Center" Margin="12,0,0,0" />
+                        <Border x:Name="GroupBadge" Background="#EEF0FB" BorderBrush="#DDE1F5" BorderThickness="1" CornerRadius="12" Padding="10,2" Margin="10,0,0,0" VerticalAlignment="Center">
+                            <TextBlock x:Name="GroupCount" FontWeight="SemiBold" FontSize="12" Foreground="#4F46E5" />
+                        </Border>
+                    </StackPanel>
+
+                    <DataGrid x:Name="Grid" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
+                              CanUserResizeColumns="False" CanUserReorderColumns="False" CanUserSortColumns="False"
+                              HeadersVisibility="Column" GridLinesVisibility="None" BorderThickness="0" Background="White" RowBackground="White"
+                              RowHeight="48" SelectionMode="Single" IsReadOnly="True" MouseDoubleClick="Grid_MouseDoubleClick">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="NO." Binding="{Binding No}" Width="80" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock"><Setter Property="Foreground" Value="#9CA3AF" /><Setter Property="FontSize" Value="14" /></Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTemplateColumn Header="SKILL NAME" Width="240" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{Binding Accent}" BorderBrush="{Binding AccentLine}" BorderThickness="1" CornerRadius="7" Padding="10,3" HorizontalAlignment="Left">
+                                            <TextBlock Text="{Binding Name}" FontFamily="Consolas" FontWeight="Bold" FontSize="14" Foreground="{Binding AccentText}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="DESCRIPTION" Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Width="*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock"><Setter Property="TextWrapping" Value="Wrap" /><Setter Property="TextTrimming" Value="CharacterEllipsis" /><Setter Property="MaxHeight" Value="40" /><Setter Property="FontSize" Value="14" /><Setter Property="Foreground" Value="#1F2937" /></Style>
+                                </DataGridTextColumn.ElementStyle>
+                                <DataGridTextColumn.EditingElementStyle>
+                                    <Style TargetType="TextBox"><Setter Property="Background" Value="White" /><Setter Property="Foreground" Value="Black" /><Setter Property="BorderBrush" Value="#4F46E5" /><Setter Property="Padding" Value="4" /><Setter Property="FontSize" Value="15" /></Style>
+                                </DataGridTextColumn.EditingElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTemplateColumn Header="SKILL.MD" Width="150" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource BtnView}" Tag="{Binding Folder}" Click="ViewSkill_Click" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- footer: sync target + Edit / Save -->
+        <Border Grid.Row="2" Background="White" BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0" Padding="28,8,28,10">
+            <StackPanel>
+                <StackPanel Margin="0,0,0,2">
+                    <TextBlock x:Name="SyncStatus" Foreground="{StaticResource Green}" FontWeight="SemiBold" FontSize="12" >
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers><Trigger Property="Text" Value=""><Setter Property="Visibility" Value="Collapsed" /></Trigger></Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock x:Name="Status" Foreground="{StaticResource Green}" FontWeight="SemiBold" FontSize="12" >
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers><Trigger Property="Text" Value=""><Setter Property="Visibility" Value="Collapsed" /></Trigger></Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,14,0">
+                        <Path Style="{StaticResource Ic}" Data="{StaticResource IcFolder}" Stroke="#F59E0B" Width="20" Height="20" />
+                        <TextBlock Text="Sync to:" FontWeight="Bold" FontSize="14" Foreground="{StaticResource Ink}" Margin="8,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <Border Grid.Column="1" Background="#F8FAFC" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Height="38">
+                        <Grid>
+                            <TextBox x:Name="SyncBox" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Margin="18,0,110,0"
+                                     FontFamily="Consolas" FontSize="14" Foreground="{StaticResource Ink}" MouseDoubleClick="SyncBox_MouseDoubleClick"
+                                     ToolTip="Type a path, or use Browse" />
+                            <Button Content="Browse" Style="{StaticResource BtnGhost}" HorizontalAlignment="Right" Margin="0,0,8,0" Click="Browse_Click" />
+                        </Grid>
+                    </Border>
+                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button x:Name="SyncBtn" Style="{StaticResource BtnAmber}" Click="Sync_Click" Margin="14,0,0,0" Height="38">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Style="{StaticResource Ic}" Data="{StaticResource IcSync}" Stroke="White" />
+                            <TextBlock x:Name="SyncText" Text="Sync" FontSize="14" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="GenerateBtn" Style="{StaticResource Btn}" Click="Generate_Click" Height="38" Visibility="Collapsed" ToolTip="Turn the wiring into one new Dino-Apps skill">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Style="{StaticResource Ic}" Data="{StaticResource IcLayers}" Stroke="White" />
+                            <TextBlock Text="Generate Skill" FontSize="14" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="UploadBtn" Style="{StaticResource Btn}" Click="Upload_Click" Height="38" ToolTip="Upload a SKILL.md to Box (v1.0.0.0.zip)">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Style="{StaticResource Ic}" Data="{StaticResource IcUpload}" Stroke="White" />
+                            <TextBlock Text="Upload Skill" FontSize="14" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                    <StackPanel x:Name="EditPanel" Grid.Column="3" Orientation="Horizontal" Margin="16,0,0,0">
+                        <Border Width="1" Background="{StaticResource Line}" Margin="0,6,8,6" />
+                        <Button x:Name="EditBtn" Style="{StaticResource Btn}" Click="Edit_Click" Height="38">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Style="{StaticResource Ic}" Data="{StaticResource IcPencil}" Stroke="White" />
+                                <TextBlock x:Name="EditText" Text="Edit" FontSize="14" Margin="8,0,0,0" />
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="SaveBtn" Style="{StaticResource BtnGreen}" IsEnabled="False" Click="Save_Click" Height="38">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Style="{StaticResource Ic}" Data="{StaticResource IcCheck}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                <TextBlock Text="Save" FontSize="14" Margin="8,0,0,0" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

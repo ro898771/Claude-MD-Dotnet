@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <RootNamespace>ClaudeMd</RootNamespace>
+    <AssemblyName>Claude-MD</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <NuGetAudit>false</NuGetAudit>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <InformationalVersion>1.0.0.0</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <Product>Claude MD</Product>
+    <AssemblyTitle>Claude MD - Claude skill storage manager</AssemblyTitle>
+    <Description>Browse, edit and sync Claude SKILL.md files kept in the Storage folder.</Description>
+    <Authors>Broadcom</Authors>
+    <Copyright>Copyright © 2026</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+
+  <!-- Box upload (same pieces BoxFast in the App Store project uses) -->
+  <ItemGroup>
+    <PackageReference Include="Box.V2" Version="3.21.0" />
+    <Reference Include="Box.Automation.WSD">
+      <HintPath>lib\Box.Automation.WSD.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

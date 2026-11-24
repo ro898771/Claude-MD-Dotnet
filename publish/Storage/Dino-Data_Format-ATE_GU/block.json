@@ -1,0 +1,4 @@
+{
+  "inputs":  [ { "name": "gu_files", "type": "GU_Files" } ],
+  "outputs": [ { "name": "gu_rows", "type": "ParsedRows" } ]
+}

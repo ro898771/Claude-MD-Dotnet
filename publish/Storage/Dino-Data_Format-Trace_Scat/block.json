@@ -1,0 +1,4 @@
+{
+  "inputs":  [ { "name": "scat_files", "type": "Scat_Files" } ],
+  "outputs": [ { "name": "s_params", "type": "SParamCsv" } ]
+}

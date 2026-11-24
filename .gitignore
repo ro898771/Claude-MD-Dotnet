@@ -55,3 +55,17 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+## ---- Claude MD project ----
+# build output and the one-file publish; only the skills in publish/Storage are kept
+bin/
+obj/
+release/
+result/
+publish/*
+!publish/Storage/
+*.user
+.vs/
+
+# Broadcom-internal library (needed to build the Box upload; get it from the App Store project, see lib/README.md)
+lib/*.dll

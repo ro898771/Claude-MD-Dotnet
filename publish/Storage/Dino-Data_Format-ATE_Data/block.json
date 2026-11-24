@@ -1,0 +1,4 @@
+{
+  "inputs":  [ { "name": "raw_files", "type": "ATE_Files" } ],
+  "outputs": [ { "name": "ate_rows", "type": "ParsedRows" } ]
+}

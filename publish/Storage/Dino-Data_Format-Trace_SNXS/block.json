@@ -1,0 +1,4 @@
+{
+  "inputs":  [ { "name": "snxs_files", "type": "SNXS_Files" } ],
+  "outputs": [ { "name": "s_params", "type": "SParamCsv" } ]
+}

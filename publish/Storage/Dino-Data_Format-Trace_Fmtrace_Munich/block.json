@@ -1,0 +1,4 @@
+{
+  "inputs":  [ { "name": "fmtrace_files", "type": "Fmtrace_Files" } ],
+  "outputs": [ { "name": "s_params", "type": "SParamCsv" } ]
+}

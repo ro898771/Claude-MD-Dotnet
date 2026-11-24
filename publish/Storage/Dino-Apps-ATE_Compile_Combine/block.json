@@ -1,0 +1,4 @@
+{
+  "inputs":  [ { "name": "benchmark_rows", "type": "ParsedRows" }, { "name": "other_rows", "type": "ParsedRows" } ],
+  "outputs": [ { "name": "combined", "type": "CompiledReport" } ]
+}

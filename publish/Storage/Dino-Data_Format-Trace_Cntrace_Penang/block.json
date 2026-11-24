@@ -1,0 +1,4 @@
+{
+  "inputs":  [ { "name": "trace_files", "type": "Tiger_Files" } ],
+  "outputs": [ { "name": "s_params", "type": "SParamCsv" } ]
+}

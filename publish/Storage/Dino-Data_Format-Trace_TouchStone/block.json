@@ -1,0 +1,4 @@
+{
+  "inputs":  [ { "name": "snp_files", "type": "TouchStone_Files" } ],
+  "outputs": [ { "name": "s_params", "type": "SParamCsv" } ]
+}
